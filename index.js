@@ -1,9 +1,13 @@
 const express = require('express');
 const axios = require('axios');
+const cors = require('cors'); // Import cors middleware
 require('dotenv').config(); // Load environment variables from .env file
 
 const app = express();
 const port = 1313;
+
+// Enable CORS for all routes
+app.use(cors());
 
 app.get('/jobs', async (req, res) => {
     try {
