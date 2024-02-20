@@ -35,14 +35,23 @@ app.get('/jobs', async (req, res) => {
             const jobResponse = await axios.get(`https://simple-machines-3.workable.com/spi/v3/jobs/${shortcode}`, options);
             const jobData = jobResponse.data;
 
+            // Extract location details
+            const location = jobData.location || {};
+            const city = location.city || "City not specified";
+            const region = location.region || "Region not specified";
+            const country = location.country || "Country not specified";
+            const workplaceType = location.workplace_type || "Workplace type not specified";
+
             return {
                 title: jobData.title,
                 full_title: jobData.full_title,
                 shortcode: jobData.shortcode,
                 department: jobData.department,
                 shortlink: jobData.shortlink,
-                location_str: jobData.location.location_str,
-                workplace_type: jobData.location.workplace_type,
+                city: city,
+                region: region,
+                country: country,
+                workplace_type: workplaceType,
                 requirements: jobData.requirements
             };
         }));
