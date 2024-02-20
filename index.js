@@ -30,8 +30,8 @@ app.get('/jobs', async (req, res) => {
         // Extract shortcodes from job details
         const shortcodes = jobs.map(job => job.shortcode);
 
-        // Get requirements for each job
-        const jobDetailsWithRequirements = await Promise.all(shortcodes.map(async (shortcode) => {
+        // Get details for each job, including requirements and description
+        const jobDetailsWithDescription = await Promise.all(shortcodes.map(async (shortcode) => {
             const jobResponse = await axios.get(`https://simple-machines-3.workable.com/spi/v3/jobs/${shortcode}`, options);
             const jobData = jobResponse.data;
 
@@ -52,11 +52,12 @@ app.get('/jobs', async (req, res) => {
                 region: region,
                 country: country,
                 workplace_type: workplaceType,
-                requirements: jobData.requirements
+                requirements: jobData.requirements,
+                description: jobData.description // Include description
             };
         }));
 
-        res.json(jobDetailsWithRequirements);
+        res.json(jobDetailsWithDescription);
     } catch (error) {
         console.error('Error fetching job details:', error.response ? error.response.data : error.message);
         res.status(500).json({
